@@ -78,29 +78,15 @@ angle of rotation and Z as the axis of rotation.
 ====================*/
 struct matrix * make_rotZ(double theta) {
   struct matrix * transform = new_matrix(4, 4);
+  ident(transform);
+  double offsets[] = {cos(theta), -sin(theta), sin(theta), cos(theta)};
   int i, j;
-  for (i = 0; i < transform->rows; i++){
-    for (j = 0; j < transform->cols; j++){
-      double val = 0;
-      if (i == j){
-        if (i < 2){
-          val = cos(theta);
-        }
-        else{
-          val = 1;
-        }
-      }
-      if (i == 0 && j == 1){
-        val = -sin(theta);
-      }
-      if (i == 1 && j == 0){
-        val = sin(theta);
-      }
-
+  for (i = 0; i < 2; i++){
+    for (j = 0; j < 2; j++){
+      transform->m[i][j] = offsets[(2 * i) + j];
     }
   }
-  transform->lastcol = transform->cols;
-  return NULL;
+  return transform;
 }
 
 

@@ -23,6 +23,9 @@ int main(int argc, char **argv) {
   transform = make_scale(2,3,4);
   printf("\n");
   print_matrix(transform);
+  transform = make_rotZ(0);
+  printf("\n");
+  print_matrix(transform);
 
   // if ( argc == 2 )
   //   parse_file( argv[1], transform, edges, s );
