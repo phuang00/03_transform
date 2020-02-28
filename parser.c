@@ -28,9 +28,9 @@ The file follows the following format:
          scale: create a scale matrix,
                 then multiply the transform matrix by the scale matrix -
                 takes 3 arguments (sx, sy, sz)
-         translate: create a translation matrix,
-                    then multiply the transform matrix by the translation matrix -
-                    takes 3 arguments (tx, ty, tz)
+         move : create a translation matrix,
+                then multiply the transform matrix by the translation matrix -
+                takes 3 arguments (tx, ty, tz)
          rotate: create a rotation matrix,
                  then multiply the transform matrix by the rotation matrix -
                  takes 2 arguments (axis, theta) axis should be x y or z
@@ -80,28 +80,48 @@ void parse_file ( char * filename,
       sscanf(line, "%lf %lf %lf %lf %lf %lf", &points[0], &points[1], &points[2], &points[3], &points[4], &points[5]);
       add_edge(edges, points[0], points[1], points[2], points[3], points[4], points[5]);
     }
-    else if (!strcmp(line, "line")){
-
-    }
     else if (!strcmp(line, "ident")){
-
+      ident(transform);
     }
     else if (!strcmp(line, "scale")){
-
+      fgets(line, 255, f);
+      double factor[3];
+      sscanf(line, "%lf %lf %lf", &factor[0], &factor[1], &factor[2]);
+      struct matrix * scale = make_scale(factor[0], factor[1], factor[2]);
+      matrix_mult(scale, transform);
     }
     else if (!strcmp(line, "move")){
-
+      fgets(line, 255, f);
+      double factor[3];
+      sscanf(line, "%lf %lf %lf", &factor[0], &factor[1], &factor[2]);
+      struct matrix * move = make_translate(factor[0], factor[1], factor[2]);
+      matrix_mult(move, transform);
     }
     else if (!strcmp(line, "rotate")){
-
+      fgets(line, 255, f);
+      char axis;
+      double theta;
+      sscanf(line, "%c %lf", &axis, &theta);
+      struct matrix * rotate = new_matrix(4,4);
+      ident(rotate);
+      if (axis == 'x'){
+        rotate = make_rotX(theta);
+      }
+      else if (axis == 'y'){
+        rotate = make_rotY(theta);
+      }
+      else if (axis == 'z'){
+        rotate = make_rotZ(theta);
+      }
+      matrix_mult(rotate, transform);
     }
     else if (!strcmp(line, "apply")){
-
+      matrix_mult(transform, edges);
     }
     else if (!strcmp(line, "display")){
       clear_screen(s);
       draw_lines(edges, s, c);
-      //display(s);
+      display(s);
     }
     else if (!strcmp(line, "save")){
       fgets(line, 255, f);
@@ -111,7 +131,7 @@ void parse_file ( char * filename,
       save_extension(s, line);
     }
     else if (!strcmp(line, "quit")){
-      fclose(filename);
+      fclose(f);
     }
     printf(":%s:\n",line);
   }
