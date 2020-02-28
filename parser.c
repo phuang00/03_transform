@@ -102,6 +102,7 @@ void parse_file ( char * filename,
       char axis;
       double theta;
       sscanf(line, "%c %lf", &axis, &theta);
+      theta *= M_PI/180;
       struct matrix * rotate = new_matrix(4,4);
       ident(rotate);
       if (axis == 'x'){
