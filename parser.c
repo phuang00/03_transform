@@ -52,8 +52,8 @@ humans use degrees, so the file will contain degrees for rotations,
 be sure to conver those degrees to radians (M_PI is the constant
 for PI)
 ====================*/
-void parse_file ( char * filename, 
-                  struct matrix * transform, 
+void parse_file ( char * filename,
+                  struct matrix * transform,
                   struct matrix * edges,
                   screen s) {
 
@@ -61,14 +61,58 @@ void parse_file ( char * filename,
   char line[256];
   clear_screen(s);
 
-  if ( strcmp(filename, "stdin") == 0 ) 
+  color c;
+  c.red = 255;
+  c.green = 255;
+  c.blue = 255;
+
+
+  if ( strcmp(filename, "stdin") == 0 )
     f = stdin;
   else
     f = fopen(filename, "r");
-  
+
   while ( fgets(line, 255, f) != NULL ) {
     line[strlen(line)-1]='\0';
+    if (!strcmp(line, "line")){
+      fgets(line, 255, f);
+      double points[6];
+      sscanf(line, "%lf %lf %lf %lf %lf %lf", &points[0], &points[1], &points[2], &points[3], &points[4], &points[5]);
+      add_edge(edges, points[0], points[1], points[2], points[3], points[4], points[5]);
+    }
+    else if (!strcmp(line, "line")){
+
+    }
+    else if (!strcmp(line, "ident")){
+
+    }
+    else if (!strcmp(line, "scale")){
+
+    }
+    else if (!strcmp(line, "move")){
+
+    }
+    else if (!strcmp(line, "rotate")){
+
+    }
+    else if (!strcmp(line, "apply")){
+
+    }
+    else if (!strcmp(line, "display")){
+      clear_screen(s);
+      draw_lines(edges, s, c);
+      //display(s);
+    }
+    else if (!strcmp(line, "save")){
+      fgets(line, 255, f);
+      line[strlen(line)-1]='\0';
+      clear_screen(s);
+      draw_lines(edges, s, c);
+      save_extension(s, line);
+    }
+    else if (!strcmp(line, "quit")){
+      fclose(filename);
+    }
     printf(":%s:\n",line);
   }
 }
-  

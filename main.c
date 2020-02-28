@@ -33,11 +33,11 @@ int main(int argc, char **argv) {
   printf("\n");
   print_matrix(transform);
 
-  // if ( argc == 2 )
-  //   parse_file( argv[1], transform, edges, s );
-  // else
-  //   parse_file( "stdin", transform, edges, s );
-  //
+  if ( argc == 2 )
+    parse_file( argv[1], transform, edges, s );
+  else
+    parse_file( "stdin", transform, edges, s );
+
   free_matrix( edges );
   free_matrix( transform );
 }
