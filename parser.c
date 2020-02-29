@@ -74,6 +74,7 @@ void parse_file ( char * filename,
 
   while ( fgets(line, 255, f) != NULL ) {
     line[strlen(line)-1]='\0';
+    printf(":%s:\n",line);
     if (!strcmp(line, "line")){
       fgets(line, 255, f);
       double points[6];
@@ -134,6 +135,5 @@ void parse_file ( char * filename,
     else if (!strcmp(line, "quit")){
       fclose(f);
     }
-    printf(":%s:\n",line);
   }
 }
